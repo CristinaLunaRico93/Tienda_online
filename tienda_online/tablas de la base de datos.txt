@@ -1,0 +1,86 @@
+CREATE TABLE Usuario (
+  id INT NOT NULL AUTO_INCREMENT,
+  usuario VARCHAR(50) NOT NULL,
+  clave VARCHAR(50) NOT NULL,
+  nombre VARCHAR(50) NOT NULL,
+  apellidos VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE Administrador (
+  codigoEmpleado INT NOT NULL,
+  PRIMARY KEY (codigoEmpleado),
+  FOREIGN KEY (codigoEmpleado) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Cliente (
+  id INT NOT NULL,
+  apellidos VARCHAR(50) NOT NULL,
+  genero ENUM('M', 'F', 'O') NOT NULL,
+  fechaNacimiento DATE NOT NULL,
+  telefono VARCHAR(15) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  direccion VARCHAR(100) NOT NULL,
+  tipoIdentificador ENUM('DNI', 'NIE', 'Pasaporte') NOT NULL,
+  identificador VARCHAR(20) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Categoria (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(50) NOT NULL,
+  categoriaPadre INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (categoriaPadre) REFERENCES Categoria(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Producto (
+  id INT NOT NULL AUTO_INCREMENT,
+  nombre VARCHAR(50) NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  categoria INT NOT NULL,
+  unidadesStock INT NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (categoria) REFERENCES Categoria(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Pedido (
+  id INT NOT NULL AUTO_INCREMENT,
+  usuario INT NOT NULL,
+  fecha DATE NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  estado ENUM('Pendiente', 'Enviado', 'Entregado') NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (usuario) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Carrito (
+  id INT NOT NULL AUTO_INCREMENT,
+  usuario INT NOT NULL,
+  fecha DATE NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  estado ENUM('Pendiente', 'Completado') NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (usuario) REFERENCES Usuario(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ProductoPedido (
+  idPedido INT NOT NULL,
+  idProducto INT NOT NULL,
+  unidades INT NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (idPedido, idProducto),
+  FOREIGN KEY (idPedido) REFERENCES Pedido(id) ON DELETE CASCADE,
+  FOREIGN KEY (idProducto) REFERENCES Producto(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ProductoCarrito (
+  idCarrito INT NOT NULL,
+  idProducto INT NOT NULL,
+  unidades INT NOT NULL,
+  precio DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (idCarrito, idProducto),
+  FOREIGN KEY (idCarrito) REFERENCES Carrito(id) ON DELETE CASCADE,
+  FOREIGN KEY (idProducto) REFERENCES Producto(id) ON DELETE CASCADE
+);
