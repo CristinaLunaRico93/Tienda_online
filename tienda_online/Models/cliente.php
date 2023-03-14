@@ -1,6 +1,6 @@
 <?php
 
- 
+require('usuario.php');
 
 class Cliente extends Usuario {
     private $genero;
