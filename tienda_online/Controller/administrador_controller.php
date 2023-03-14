@@ -4,8 +4,10 @@ require_once('Models/administrador.php');
 
 class AdministradorController {
 
+  public function __construct(){}
+
   // Acción para crear un nuevo administrador
-  public function crear() {
+  public function register() {
     // Si se ha enviado el formulario
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       // Recogemos los datos del formulario
@@ -26,21 +28,21 @@ class AdministradorController {
       exit;
     } else {
       // Mostramos el formulario de creación
-      require('views/administrador/crear.php');
+      require('views/administrador/register.php');
     }
   }
 
   // Acción para listar todos los administradores
-  public function listar() {
+  public function index() {
     // Recuperamos todos los administradores de la base de datos
     $administradores = Administrador::listar();
 
     // Mostramos la vista con la lista de administradores
-    require('views/administrador/listar.php');
+    require('views/administrador/index.php');
   }
 
   // Acción para editar un administrador
-  public function editar() {
+  public function update() {
     // Recogemos el id del administrador a editar
     $id = $_GET['id'];
 
@@ -67,12 +69,12 @@ class AdministradorController {
       $admin = Administrador::buscarPorId($id);
 
       // Mostramos el formulario de edición
-      require('views/administrador/editar.php');
+      require('views/administrador/update.php');
     }
   }
 
   // Acción para eliminar un administrador
-  public function eliminar() {
+  public function delete() {
     // Recogemos el id del administrador a eliminar
     $id = $_GET['id'];
 
@@ -83,5 +85,8 @@ class AdministradorController {
     header('Location: index.php?controller=administrador&action=listar');
     exit;
   }
+
+  public function error(){
+    require_once('views/administrador/error.php');
+  }
 }
-?>
