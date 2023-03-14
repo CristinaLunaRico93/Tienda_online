@@ -1,5 +1,6 @@
 <?php
 
+require('usuario.php');
 class Administrador extends Usuario {
     private $codigoEmpleado;
 
